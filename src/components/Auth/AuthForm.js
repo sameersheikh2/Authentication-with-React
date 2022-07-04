@@ -1,11 +1,13 @@
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import AuthContext from '../../store/auth-context';
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true);
+
+  const authCtx = useContext(AuthContext);
 
   const emailChangeHandler = (event) => {
     setInputEmail(event.target.value);
@@ -51,7 +53,7 @@ const AuthForm = () => {
         });
       }
     }).then(data=>{
-      console.log(data)
+      authCtx.login(data.idToken);
     }).catch((err)=>{
       alert(err.message)
     })
