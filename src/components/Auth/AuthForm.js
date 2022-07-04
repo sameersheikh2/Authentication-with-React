@@ -3,15 +3,15 @@ import { useState } from 'react';
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
-  const [email , setEmail] = useState('')
-  const [pass , setPass] = useState('')
+  const [inputEmail , setInputEmail] = useState('')
+  const [inputPassword , setInputPassword] = useState('')
   const [isLogin, setIsLogin] = useState(true);
 
   const emailChangeHandler = (event) =>{
-    setEmail(event.target.value);
+    setInputEmail(event.target.value);
   }
   const passChangeHandler = (event) =>{
-    setPass(event.target.value);
+    setInputPassword(event.target.value);
   }
 
 
@@ -22,13 +22,40 @@ const AuthForm = () => {
   const submitHandler = (event) =>{
     event.preventDefault();
 
-    
+    const enteredEmail = inputEmail;
+    const enteredPassword = inputPassword;
+
+    if(isLogin){
+      
+    }
+    else {
+      fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBFoNvIDe7rM2vMIHUfW4mBvvcwUHu95kk',{
+      method: 'POST',  
+      body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        }),
+        headers: {
+        'Content-Type': 'application/json',
+        }
+      }).then((response)=>
+      {if(response.ok){
+
+      }
+      else{
+        return response.json().then((data)=>{
+          console.log(data)
+        })
+      }}
+      )
+    }
   }
 
   return (
     <section className={classes.auth}>
       <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
-      <form>
+      <form onSubmit={submitHandler}>
         <div className={classes.control}>
           <label htmlFor='email'>Your Email</label>
           <input type='email' id='email' required onChange={emailChangeHandler} />
